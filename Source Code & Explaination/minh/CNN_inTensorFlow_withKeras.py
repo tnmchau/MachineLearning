@@ -6,33 +6,32 @@ from keras.layers import Flatten
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.optimizers import Adam
-from keras.utils import np_utils
+from keras.utils import to_categorical
 
 # load data
 # bộ dữ liệu được load vào là mảng 3D 
 # với 60000 28x28 grayscale với X_train và 10000 ứng với X_test
 # image data with shape (num_samples, 28, 28) -> (60000,28,28)
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
-(X_train, y_train), (X_test, y_test) = mnist.load_data()
 
 # Input shape that CNN expects is a 4D array (batch, height, width, channels) <batch: số samples>
 # X_train có shape(60000,28 ,28) -> X_train.shape[0] = 60000 ...tương tự.
 # channel =1 trong trường hợp này Grayscale, =3 RGB
 # convert our data type to float32 (giá trị se là số thực)
-X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], X_train.shape[2], 1).astype('float32')
-X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], X_test.shape[2], 1).astype('float32')
+X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], X_train.shape[2], 1)
+X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], X_test.shape[2], 1)
 
 #normalize inputs from 0-255 to 0-1
 #mỗi pixel trên ả có value từ 0-255 ta sẽ quy tỉ lệ thành 0-1  (ảnh trắng -đen)
-X_train/=255
-X_test/=255
+X_train = X_train.astype('float32')/255
+X_test = X_test.astype('float32')/255
 
 # one hot encode
 #output cuối cùng cần phải phân lọai ra chữ số trong 10 số từ 0-9 --> multiple classification
 # onhot encode converts a class vector (integers) to binary class matrix
 number_of_classes = 10
-y_train = np_utils.to_categorical(y_train, number_of_classes)
-y_test = np_utils.to_categorical(y_test, number_of_classes)
+y_train = to_categorical(y_train, number_of_classes)
+y_test = to_categorical(y_test, number_of_classes)
 
 # create model
 
@@ -66,11 +65,11 @@ model.add(Dense(number_of_classes, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
 
 # Fit the model
-model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=10, batch_size=200)
+model.fit(X_train, y_train,, epochs=10, batch_size=128, validation_data=(X_test, y_test))
 
 # Save the model
 model.save('E:\Research\Semester 7\Machine Learning\Git\Source Code & Explaination\minh\mnistCNN.h5')
 # Final evaluation of the model
-metrics = model.evaluate(X_train, y_train, verbose=0)
+metrics = model.evaluate(X_train, y_train)
 print("Metrics(Test loss & Test Accuracy): ")
 print(metrics)

@@ -1,6 +1,8 @@
 from keras.datasets import mnist
 from keras.models import load_model
 import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
 
 model = load_model('E:\Research\Semester 7\Machine Learning\Git\Source Code & Explaination\minh\mnistCNN.h5')
 
