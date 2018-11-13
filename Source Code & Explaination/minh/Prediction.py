@@ -18,5 +18,7 @@ test = X_test[0].reshape(1,28,28,1)
 
 # Predicting the Test set results
 y_pred = model.predict(test)
-print(y_pred)
+print("Predict results: \n", y_pred[0])
+print("Predict label: \n", np.argmax(y_pred[0]))
+# print(y_pred)
 
