@@ -2,7 +2,7 @@ from keras.datasets import mnist
 from keras.models import load_model
 import matplotlib.pyplot as plt
 
-model = load_model('E:/HK7/ML/Pyth/CNN-keras/models/mnistCNN.h5')
+model = load_model('E:\Research\Semester 7\Machine Learning\Git\Source Code & Explaination\minh\mnistCNN.h5')
 
 # load data
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
