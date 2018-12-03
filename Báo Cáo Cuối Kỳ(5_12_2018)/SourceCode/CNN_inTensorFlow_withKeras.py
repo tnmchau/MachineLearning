@@ -7,6 +7,12 @@ from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.optimizers import Adam
 from keras.utils import to_categorical
+from keras.utils import plot_model
+from keras.layers import Dropout
+import matplotlib.pyplot as plt
+from keras.utils.vis_utils import model_to_dot
+from keras.utils import plot_model
+from IPython.display import SVG
 
 # load data
 # bộ dữ liệu được load vào là mảng 3D 
@@ -43,11 +49,11 @@ model.add(Conv2D(32, (5, 5), input_shape=(X_train.shape[1], X_train.shape[2], 1)
 
 #the next layer Pooling layer --> reduce 5x5 -> 2x2  <downscale (vertical, horizontal)>
 model.add(MaxPooling2D(pool_size=(2, 2)))
-
+model.add(Dropout(0.2))
 #have 32filter/output channels, size 3x3, activation for output là ReLU
 model.add(Conv2D(32, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-
+model.add(Dropout(0.2))
 #converts the 2D matrix data to a vector
 #Output này là standard input cho fully connected layers
 model.add(Flatten())
@@ -65,11 +71,14 @@ model.add(Dense(number_of_classes, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
 
 # Fit the model
-model.fit(X_train, y_train,, epochs=10, batch_size=128, validation_data=(X_test, y_test))
+history= model.fit(X_train, y_train, epochs=10, batch_size=128, validation_data=(X_test, y_test))
 
 # Save the model
-model.save('E:\Research\Semester 7\Machine Learning\Git\Source Code & Explaination\minh\mnistCNN.h5')
+model.save('D:\Research\Semester 7\Machine Learning\Git\Source Code & Explaination\minh\mnistCNN.h5')
 # Final evaluation of the model
-metrics = model.evaluate(X_train, y_train)
+metrics = model.evaluate(X_test, y_test)
 print("Metrics(Test loss & Test Accuracy): ")
 print(metrics)
+
+plot_model(model, to_file='model.png')
+SVG(model_to_dot(model).create(prog='dot', format='svg'))
